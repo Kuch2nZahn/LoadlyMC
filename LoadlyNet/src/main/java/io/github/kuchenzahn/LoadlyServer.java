@@ -44,8 +44,6 @@ public class LoadlyServer extends ChannelInitializer<Channel> {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-        System.out.println(String.format("Started LoadlyServer with Server ID: %s", serverAddressUUID.getUuid().toString()));
     }
 
     @Override
