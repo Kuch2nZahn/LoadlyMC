@@ -1,0 +1,4 @@
+name: LoadlyBukkit
+version: '${project.version}'
+main: io.github.kuchenzahn.loadlybukkit.LoadlyBukkit
+api-version: '1.20'
