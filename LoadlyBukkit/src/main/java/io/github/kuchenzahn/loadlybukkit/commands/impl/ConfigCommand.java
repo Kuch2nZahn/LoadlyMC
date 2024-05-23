@@ -24,8 +24,8 @@ public class ConfigCommand implements PlayerRequieredICommand {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
-
+    public boolean execute(CommandSender sender, String[] args) {
+        return false;
     }
 
 

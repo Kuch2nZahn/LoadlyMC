@@ -12,6 +12,6 @@ public interface ICommand {
     String help();
     boolean playerRequired();
 
-    void execute(CommandSender sender, String[] args);
+    boolean execute(CommandSender sender, String[] args);
     HashMap<Integer, List<String>> getTabCompletions();
 }

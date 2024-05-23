@@ -23,13 +23,23 @@ public class CommandManager {
     public void onExecution(CommandSender sender, String[] args, String label){
         for(ICommand command : commands){
             if(command.name().equalsIgnoreCase(label)){
+                boolean executed = false;
+
                 if(command.playerRequired() && !(sender instanceof Player)){
                     String errorMessage = (String) ConfigManager.get(ConfigManager.ConfigParam.MESSAGE_COMMAND_PLAYER_REQUIRED);
                     MessageHandler.addMessageToQueue(new Message(errorMessage, MessageHandler.MessageType.ERROR, MessageHandler.MessageReceiver.CONSOLE));
                     return;
+                } else {
+                    executed = command.execute(sender, args);
                 }
 
-                command.execute((Player) sender, args);
+                executed = command.execute((Player) sender, args);
+
+                if(!executed){
+                    String errorMessage = command.help();
+                    MessageHandler.MessageReceiver receiver = command.playerRequired() ? MessageHandler.MessageReceiver.forPlayer(((Player) sender).getUniqueId()) : MessageHandler.MessageReceiver.CONSOLE;
+                    MessageHandler.addMessageToQueue(new Message(errorMessage, MessageHandler.MessageType.ERROR, receiver));
+                }
             }
         }
     }
@@ -46,7 +56,6 @@ public class CommandManager {
 
         for(ICommand command : commands){
             if(command.name().equalsIgnoreCase(label)){
-                System.out.println("Test passed");
                 HashMap<Integer, List<String>> tabCompletions = command.getTabCompletions();
                 return tabCompletions.get(positon - 2);
             }
