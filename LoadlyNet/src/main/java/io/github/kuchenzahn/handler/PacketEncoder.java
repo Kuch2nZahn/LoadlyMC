@@ -29,6 +29,7 @@ public class PacketEncoder extends MessageToByteEncoder<LoadlyPacket> {
 
         PacketBuffer buffer = new PacketBuffer();
         buffer.writeUUID(loadlyPacket.getPacketReceiverUUID().getUuid());
+        buffer.writeUUID(uuid.getUuid());
         loadlyPacket.write(buffer);
         byteBuf.writeBytes(buffer);
     }

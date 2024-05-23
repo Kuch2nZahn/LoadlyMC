@@ -31,13 +31,11 @@ public class PacketDecoder extends ByteToMessageDecoder {
         long sessionId = byteBuf.readLong();
         PacketBuffer buffer = new PacketBuffer(byteBuf.readBytes(byteBuf.readableBytes()));
         UUID receiverUUID = buffer.readUUID();
-
-        System.out.println("receiverUUID = " + receiverUUID);
-
+        UUID senderUUID = buffer.readUUID();
         if (receiverUUID.toString().equals(LoadlyUUID.LoadlyUUIDS.ALL_PLAYERS.getUUIDAsString()) || receiverUUID.toString().equals(LoadlyUUID.LoadlyUUIDS.EVERYONE.getUUIDAsString()) || receiverUUID.toString().equals(uuid.getUuid().toString())){
-            System.out.println("Test 1 Passed");
             LoadlyPacket loadlyPacket = packetRegistry.constructPacket(packetId);
             loadlyPacket.setSessionId(sessionId);
+            loadlyPacket.setSenderUUID(LoadlyUUID.fromUUID(senderUUID));
             loadlyPacket.read(buffer);
 
             list.add(loadlyPacket);

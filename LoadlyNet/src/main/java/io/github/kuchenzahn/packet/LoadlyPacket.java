@@ -11,6 +11,7 @@ public abstract class LoadlyPacket implements Encoder, Decoder {
 
     private long sessionId = ThreadLocalRandom.current().nextLong();
     private LoadlyUUID packetReceiverUUID;
+    private LoadlyUUID senderUUID;
 
     public void setSessionId(long sessionId) {
         this.sessionId = sessionId;
@@ -18,6 +19,14 @@ public abstract class LoadlyPacket implements Encoder, Decoder {
 
     public void setPacketReceiverUUID(LoadlyUUID packetReceiverUUID) {
         this.packetReceiverUUID = packetReceiverUUID;
+    }
+
+    public void setSenderUUID(LoadlyUUID senderUUID) {
+        this.senderUUID = senderUUID;
+    }
+
+    public LoadlyUUID getSenderUUID() {
+        return senderUUID;
     }
 
     public LoadlyUUID getPacketReceiverUUID() {
