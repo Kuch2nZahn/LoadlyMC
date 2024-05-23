@@ -3,16 +3,16 @@
 	"id": "loadlyfabric",
 	"version": "${version}",
 	"name": "LoadlyFabric",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "This mod expands the functions that server plugins can use, creating a bridge between server and client to make the user experience significantly better",
 	"authors": [
-		"Me!"
+		"Kuchenzahn"
 	],
 	"contact": {
 		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"sources": "https://github.com/FabricMC/"
 	},
 	"license": "CC0-1.0",
-	"icon": "assets/loadlyfabric/icon.png",
+	"icon": "assets/loadlyfabric/logo.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [

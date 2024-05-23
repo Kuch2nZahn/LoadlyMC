@@ -13,6 +13,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
+import java.net.ConnectException;
 import java.net.InetSocketAddress;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -27,7 +28,7 @@ public class LoadlyClient extends ChannelInitializer<Channel> {
 
     private final EventLoopGroup workerGroup = new NioEventLoopGroup();
 
-    public LoadlyClient(InetSocketAddress address, IPacketRegistry packetRegistry, Consumer<Future<? super Void>> doneCallback, EventRegistry eventRegistry, LoadlyUUID uuid) {
+    public LoadlyClient(InetSocketAddress address, IPacketRegistry packetRegistry, Consumer<Future<? super Void>> doneCallback, EventRegistry eventRegistry, LoadlyUUID uuid) throws ConnectException {
         this.packetRegistry = packetRegistry;
         this.clientID = uuid;
         this.eventRegistry = eventRegistry;
@@ -41,7 +42,7 @@ public class LoadlyClient extends ChannelInitializer<Channel> {
             this.bootstrap.connect(address)
                     .awaitUninterruptibly().sync().addListener(doneCallback::accept);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            throw new ConnectException("Failed to connect to server");
         }
 
         System.out.println(String.format("Started LoadlyClient with Client ID: %s", uuid.getUuid().toString()));
