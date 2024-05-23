@@ -12,8 +12,10 @@ import net.minecraft.text.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.net.ConnectException;
 import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.util.UUID;
 
 public class LoadlyFabric implements ModInitializer {
@@ -29,6 +31,9 @@ public class LoadlyFabric implements ModInitializer {
 		this.packetRegistry = new LoadlyPacketRegistry();
 
 		ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
+
+			if(isLoadlyServer(handler.getServerInfo().address, 2244) == false) return;
+
 			Logger logger = LoggerFactory.getLogger("LoadlyFabric");
 			ServerInfo serverInfo = handler.getServerInfo();
 			InetSocketAddress address = new InetSocketAddress(serverInfo.address, 2244);
@@ -46,5 +51,15 @@ public class LoadlyFabric implements ModInitializer {
 			packet.setPacketReceiverUUID(LoadlyUUID.LoadlyUUIDS.SERVER.get());
 			loadlyClient.sendPacket(packet);
         });
+	}
+
+	private boolean isLoadlyServer(String address, int port) throws IllegalStateException {
+		try (Socket ignored = new Socket(address, port)) {
+			return true;
+		} catch (ConnectException e) {
+			return false;
+		} catch (IOException e) {
+			throw new IllegalStateException("Error while trying to check open port", e);
+		}
 	}
 }
