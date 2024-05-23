@@ -17,6 +17,15 @@ public class Message {
         this.countdown = 1;
     }
 
+    public Message(String content, MessageHandler.MessageType type, MessageHandler.MessageReceiver receiver){
+        this.content = content;
+        this.priority = type.getPriority();
+        this.display = MessageHandler.MessageDisplay.CHAT;
+        this.type = type;
+        this.receiver = receiver;
+        this.countdown = 1;
+    }
+
     public Message(String content, MessageHandler.MessageDisplay display, MessageHandler.MessageType type, MessageHandler.MessageReceiver receiver) {
         this.content = content;
         this.priority = type.getPriority();

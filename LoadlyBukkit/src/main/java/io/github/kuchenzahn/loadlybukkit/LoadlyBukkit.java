@@ -3,6 +3,8 @@ package io.github.kuchenzahn.loadlybukkit;
 import io.github.kuchenzahn.LoadlyServer;
 import io.github.kuchenzahn.LoadlyUUID;
 import io.github.kuchenzahn.event.EventRegistry;
+import io.github.kuchenzahn.loadlybukkit.commands.CommandManager;
+import io.github.kuchenzahn.loadlybukkit.commands.LoadlyCommand;
 import io.github.kuchenzahn.loadlybukkit.config.ConfigManager;
 import io.github.kuchenzahn.loadlybukkit.event.EventHandler;
 import io.github.kuchenzahn.loadlybukkit.message.MessageHandler;
@@ -23,6 +25,7 @@ public final class LoadlyBukkit extends JavaPlugin {
     private EventRegistry eventRegistry;
     private EventHandler eventHandler;
     private LoadlyPacketRegistry packetRegistry;
+    private CommandManager commandManager;
 
     @Override
     public void onEnable() {
@@ -35,6 +38,11 @@ public final class LoadlyBukkit extends JavaPlugin {
         this.messageHandler = new MessageHandler();
 
         startLoadlyServer();
+
+        this.commandManager = new CommandManager();
+        LoadlyCommand loadlyCommand = new LoadlyCommand();
+        getCommand("loadly").setExecutor(loadlyCommand);
+        getCommand("loadly").setTabCompleter(loadlyCommand);
     }
 
     @Override
@@ -81,6 +89,10 @@ public final class LoadlyBukkit extends JavaPlugin {
 
     public MessageHandler getMessageHandler() {
         return messageHandler;
+    }
+
+    public CommandManager getCommandManager() {
+        return commandManager;
     }
 
     public static LoadlyBukkit getInstance() {

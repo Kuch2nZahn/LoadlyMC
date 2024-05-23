@@ -1,10 +1,15 @@
 io\github\kuchenzahn\loadlybukkit\message\MessageHandler$MessageType.class
 io\github\kuchenzahn\loadlybukkit\LoadlyBukkit.class
 io\github\kuchenzahn\loadlybukkit\message\MessageHandler$MessageReceiver.class
+io\github\kuchenzahn\loadlybukkit\commands\ICommand.class
 io\github\kuchenzahn\loadlybukkit\message\Message.class
+io\github\kuchenzahn\loadlybukkit\message\MessageHandler$1.class
+io\github\kuchenzahn\loadlybukkit\commands\CommandManager.class
+io\github\kuchenzahn\loadlybukkit\commands\impl\ConfigCommand.class
+io\github\kuchenzahn\loadlybukkit\commands\LoadlyCommand.class
 io\github\kuchenzahn\loadlybukkit\event\EventHandler.class
 io\github\kuchenzahn\loadlybukkit\message\MessageHandler$MessageDisplay.class
-io\github\kuchenzahn\loadlybukkit\message\MessageHandler$1.class
+io\github\kuchenzahn\loadlybukkit\commands\PlayerRequieredICommand.class
 io\github\kuchenzahn\loadlybukkit\config\ConfigManager.class
 io\github\kuchenzahn\loadlybukkit\message\MessageHandler.class
 io\github\kuchenzahn\loadlybukkit\config\ConfigManager$ConfigParam.class
