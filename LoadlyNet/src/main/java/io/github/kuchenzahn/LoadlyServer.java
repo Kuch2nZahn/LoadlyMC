@@ -1,5 +1,7 @@
 package io.github.kuchenzahn;
 
+import io.github.kuchenzahn.event.EventRegistry;
+import io.github.kuchenzahn.handler.PacketChannelInboundHandler;
 import io.github.kuchenzahn.handler.PacketDecoder;
 import io.github.kuchenzahn.handler.PacketEncoder;
 import io.github.kuchenzahn.packet.LoadlyPacket;
@@ -22,15 +24,18 @@ public class LoadlyServer extends ChannelInitializer<Channel> {
 
     private final ServerBootstrap bootstrap;
     private final IPacketRegistry packetRegistry;
+    private final EventRegistry eventRegistry;
 
     private EventLoopGroup parentGroup = new NioEventLoopGroup();
     private EventLoopGroup workerGroup = new NioEventLoopGroup();
 
     private Channel connectedChannel;
 
-    public LoadlyServer(InetSocketAddress adress, IPacketRegistry packetRegistry, Consumer<Future<? super Void>> doneCallback, LoadlyUUID uuid) {
+    public LoadlyServer(InetSocketAddress adress, IPacketRegistry packetRegistry, Consumer<Future<? super Void>> doneCallback, LoadlyUUID uuid, EventRegistry eventRegistry) {
         this.serverAddressUUID = uuid;
         this.packetRegistry = packetRegistry;
+        this.eventRegistry = eventRegistry;
+
         this.bootstrap = new ServerBootstrap()
                 .option(ChannelOption.AUTO_READ, true)
                 .childOption(ChannelOption.SO_KEEPALIVE, true)
@@ -49,7 +54,7 @@ public class LoadlyServer extends ChannelInitializer<Channel> {
     @Override
     protected void initChannel(Channel channel) throws Exception {
         channel.pipeline()
-                .addLast(new PacketDecoder(packetRegistry, serverAddressUUID), new PacketEncoder(packetRegistry, serverAddressUUID));
+                .addLast(new PacketDecoder(packetRegistry, serverAddressUUID), new PacketEncoder(packetRegistry, serverAddressUUID), new PacketChannelInboundHandler(eventRegistry));
         this.connectedChannel = channel;
     }
 

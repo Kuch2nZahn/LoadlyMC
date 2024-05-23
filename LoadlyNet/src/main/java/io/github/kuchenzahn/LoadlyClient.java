@@ -1,9 +1,11 @@
 package io.github.kuchenzahn;
 
+import com.sun.tools.jdi.Packet;
 import io.github.kuchenzahn.event.EventRegistry;
 import io.github.kuchenzahn.handler.PacketChannelInboundHandler;
 import io.github.kuchenzahn.handler.PacketDecoder;
 import io.github.kuchenzahn.handler.PacketEncoder;
+import io.github.kuchenzahn.packet.LoadlyPacket;
 import io.github.kuchenzahn.registry.IPacketRegistry;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -27,6 +29,8 @@ public class LoadlyClient extends ChannelInitializer<Channel> {
     private final EventRegistry eventRegistry;
 
     private final EventLoopGroup workerGroup = new NioEventLoopGroup();
+
+    private Channel connectedChannel;
 
     public LoadlyClient(InetSocketAddress address, IPacketRegistry packetRegistry, Consumer<Future<? super Void>> doneCallback, EventRegistry eventRegistry, LoadlyUUID uuid) throws ConnectException {
         this.packetRegistry = packetRegistry;
@@ -52,6 +56,15 @@ public class LoadlyClient extends ChannelInitializer<Channel> {
     protected void initChannel(Channel channel) throws Exception {
         channel.pipeline()
                 .addLast(new PacketDecoder(packetRegistry, clientID), new PacketEncoder(packetRegistry, clientID), new PacketChannelInboundHandler(eventRegistry));
+        this.connectedChannel = channel;
+    }
+
+    public void sendPacket(LoadlyPacket packet){
+        if(this.connectedChannel == null){
+            throw new IllegalStateException("Channel not connected");
+        }
+
+        this.connectedChannel.writeAndFlush(packet);
     }
 
     public void shutdown() {
