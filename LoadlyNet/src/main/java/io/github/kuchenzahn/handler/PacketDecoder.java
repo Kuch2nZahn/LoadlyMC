@@ -34,7 +34,8 @@ public class PacketDecoder extends ByteToMessageDecoder {
 
         System.out.println("receiverUUID = " + receiverUUID);
 
-        if (receiverUUID.equals(LoadlyUUID.LoadlyUUIDS.ALL_PLAYERS.getUUID()) || receiverUUID.equals(LoadlyUUID.LoadlyUUIDS.EVERYONE.getUUID()) || receiverUUID.equals(uuid.getUuid())){
+        if (receiverUUID.toString().equals(LoadlyUUID.LoadlyUUIDS.ALL_PLAYERS.getUUIDAsString()) || receiverUUID.toString().equals(LoadlyUUID.LoadlyUUIDS.EVERYONE.getUUIDAsString()) || receiverUUID.toString().equals(uuid.getUuid().toString())){
+            System.out.println("Test 1 Passed");
             LoadlyPacket loadlyPacket = packetRegistry.constructPacket(packetId);
             loadlyPacket.setSessionId(sessionId);
             loadlyPacket.read(buffer);

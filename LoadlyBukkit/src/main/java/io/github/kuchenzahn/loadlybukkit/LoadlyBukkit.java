@@ -4,6 +4,7 @@ import io.github.kuchenzahn.LoadlyServer;
 import io.github.kuchenzahn.LoadlyUUID;
 import io.github.kuchenzahn.event.EventRegistry;
 import io.github.kuchenzahn.loadlybukkit.config.ConfigManager;
+import io.github.kuchenzahn.loadlybukkit.event.EventHandler;
 import io.github.kuchenzahn.loadlybukkit.message.MessageHandler;
 import io.github.kuchenzahn.registry.LoadlyPacketRegistry;
 import org.bukkit.Bukkit;
@@ -20,6 +21,7 @@ public final class LoadlyBukkit extends JavaPlugin {
 
     private LoadlyServer loadlyServer;
     private EventRegistry eventRegistry;
+    private EventHandler eventHandler;
     private LoadlyPacketRegistry packetRegistry;
 
     @Override
@@ -29,6 +31,7 @@ public final class LoadlyBukkit extends JavaPlugin {
         this.configManager = new ConfigManager();
         configManager.checkConfig();
 
+        this.eventHandler = new EventHandler();
         this.messageHandler = new MessageHandler();
 
         startLoadlyServer();
@@ -44,12 +47,17 @@ public final class LoadlyBukkit extends JavaPlugin {
         String host = config.contains("host") ? config.getString("host") : "localhost";
         int port = config.contains("port") ? config.getInt("port") : 2244;
 
+        this.packetRegistry = new LoadlyPacketRegistry();
+        this.eventRegistry = new EventRegistry();
+
+        eventRegistry.registerEvents(eventHandler);
+
         InetSocketAddress address = new InetSocketAddress(host, port);
 
         MessageHandler.sendConsoleMessage("Starting LoadlyServer on " + address.toString(), MessageHandler.MessageType.INFO);
 
         LoadlyUUID loadlyServerUUID = LoadlyUUID.LoadlyUUIDS.SERVER.get();
-        this.loadlyServer = new LoadlyServer(address, packetRegistry, future -> {}, loadlyServerUUID);
+        this.loadlyServer = new LoadlyServer(address, packetRegistry, future -> {}, loadlyServerUUID, eventRegistry);
 
         MessageHandler.sendConsoleMessage("LoadlyServer started with Server ID: " + loadlyServerUUID.getUuid().toString(), MessageHandler.MessageType.INFO);
         MessageHandler.sendConsoleMessage("LoadlyServer ID 00000000-0000-0000-0000-000000000000 is reserved for the server itself, this is not an ERROR!", MessageHandler.MessageType.WARNING);
