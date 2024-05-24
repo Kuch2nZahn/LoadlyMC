@@ -2,10 +2,12 @@ package io.github.kuchenzahn.loadlybukkit.event;
 
 import io.github.kuchenzahn.LoadlyUUID;
 import io.github.kuchenzahn.event.PacketSubscriber;
+import io.github.kuchenzahn.loadlybukkit.LoadlyBukkit;
 import io.github.kuchenzahn.loadlybukkit.config.ConfigManager;
 import io.github.kuchenzahn.loadlybukkit.message.Message;
 import io.github.kuchenzahn.loadlybukkit.message.MessageHandler;
 import io.github.kuchenzahn.packet.impl.LoadlyHelloC2SPacket;
+import io.github.kuchenzahn.packet.impl.LoadlyHelloS2CPacket;
 import io.netty.channel.ChannelHandlerContext;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -16,6 +18,10 @@ public class EventHandler {
         Player player = Bukkit.getPlayer(packet.getSenderUUID().getUuid());
 
         MessageHandler.sendConsoleMessage(String.format("Player %s has connected to the Loadly server and is using Loadly!", player.getName()), MessageHandler.MessageType.INFO);
+
+        LoadlyHelloS2CPacket response = new LoadlyHelloS2CPacket();
+        response.setPacketReceiverUUID(packet.getSenderUUID());
+        LoadlyBukkit.getInstance().getLoadlyServer().send(response);
 
         Object o = ConfigManager.get(ConfigManager.ConfigParam.AUTOMATIC_JOIN_MESSAGE);
         if(o instanceof Boolean && (Boolean) o){

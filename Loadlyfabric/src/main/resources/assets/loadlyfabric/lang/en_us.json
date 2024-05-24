@@ -1,3 +1,5 @@
 {
-  "loadly.connection_error": "There was an error connecting to the server. Please contact the Server administrator or Loadly Support via Fabric/Spigot"
+  "loadly.connection_error": "There was an error connecting to the server. Please contact the Server administrator or Loadly Support via Fabric/Spigot",
+  "loadly.serverconnect.title": "Loadly",
+  "loadly.serverconnect.description": "This server uses Loadly. Connections are loading..."
 }

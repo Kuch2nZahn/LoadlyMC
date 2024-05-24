@@ -20,6 +20,7 @@ io\github\kuchenzahn\io\CallableDecoder.class
 io\github\kuchenzahn\packet\LoadlyPacket.class
 io\github\kuchenzahn\LoadlyServer.class
 io\github\kuchenzahn\event\PacketSubscriber.class
+io\github\kuchenzahn\packet\impl\LoadlyHelloS2CPacket.class
 io\github\kuchenzahn\LoadlyUUID$LoadlyUUIDS.class
 io\github\kuchenzahn\utils\UUIDUtil.class
 io\github\kuchenzahn\response\RespondingPacket.class

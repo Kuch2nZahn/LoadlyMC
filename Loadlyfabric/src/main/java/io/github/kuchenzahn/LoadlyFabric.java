@@ -1,5 +1,6 @@
 package io.github.kuchenzahn;
 
+import io.github.kuchenzahn.event.EventHandler;
 import io.github.kuchenzahn.event.EventRegistry;
 import io.github.kuchenzahn.packet.impl.LoadlyHelloC2SPacket;
 import io.github.kuchenzahn.registry.LoadlyPacketRegistry;
@@ -24,10 +25,14 @@ public class LoadlyFabric implements ModInitializer {
 	private LoadlyClient loadlyClient = null;
 	private EventRegistry eventRegistry;
 	private LoadlyPacketRegistry packetRegistry;
+	private EventHandler eventHandler;
 
 	@Override
 	public void onInitialize() {
+		this.eventHandler = new EventHandler();
 		this.eventRegistry = new EventRegistry();
+		eventRegistry.registerEvents(eventHandler);
+
 		this.packetRegistry = new LoadlyPacketRegistry();
 
 		ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
