@@ -51,6 +51,13 @@ public class LoadlyFabric implements ModInitializer {
 			packet.setPacketReceiverUUID(LoadlyUUID.LoadlyUUIDS.SERVER.get());
 			loadlyClient.sendPacket(packet);
         });
+
+		ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
+			if(loadlyClient != null) {
+				loadlyClient.shutdown();
+				loadlyClient = null;
+			}
+		});
 	}
 
 	private boolean isLoadlyServer(String address, int port) throws IllegalStateException {
