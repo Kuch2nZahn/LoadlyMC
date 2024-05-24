@@ -24,16 +24,22 @@ public class CommandManager {
         for(ICommand command : commands){
             if(command.name().equalsIgnoreCase(label)){
                 boolean executed = false;
+                System.out.println("Test Passed");
+
+                String[] newArgs = new String[args.length - 1];
+                System.arraycopy(args, 1, newArgs, 0, args.length - 1);
 
                 if(command.playerRequired() && !(sender instanceof Player)){
                     String errorMessage = (String) ConfigManager.get(ConfigManager.ConfigParam.MESSAGE_COMMAND_PLAYER_REQUIRED);
                     MessageHandler.addMessageToQueue(new Message(errorMessage, MessageHandler.MessageType.ERROR, MessageHandler.MessageReceiver.CONSOLE));
                     return;
-                } else {
-                    executed = command.execute(sender, args);
                 }
 
-                executed = command.execute((Player) sender, args);
+                if((sender instanceof Player)){
+                    executed = command.execute((Player) sender, newArgs);
+                } else {
+                    executed = command.execute(sender, newArgs);
+                }
 
                 if(!executed){
                     String errorMessage = command.help();

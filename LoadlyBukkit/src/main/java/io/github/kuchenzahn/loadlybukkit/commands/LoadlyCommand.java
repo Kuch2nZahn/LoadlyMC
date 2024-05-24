@@ -14,8 +14,9 @@ public class LoadlyCommand implements CommandExecutor, TabExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         CommandManager commandManager = LoadlyBukkit.getInstance().getCommandManager();
-        commandManager.onExecution(sender, args, label);
-        return false;
+
+        commandManager.onExecution(sender, args, args[0]);
+        return true;
     }
 
     @Override

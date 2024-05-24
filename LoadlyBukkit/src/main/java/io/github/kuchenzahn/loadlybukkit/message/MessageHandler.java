@@ -2,6 +2,7 @@ package io.github.kuchenzahn.loadlybukkit.message;
 
 import io.github.kuchenzahn.LoadlyUUID;
 import io.github.kuchenzahn.loadlybukkit.LoadlyBukkit;
+import io.github.kuchenzahn.loadlybukkit.config.ConfigManager;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -13,7 +14,6 @@ public class MessageHandler {
     public static String PREFIX = "§8[§6Loadly§8] §7";
 
     private PriorityQueue<Message> messageQueue;
-    private int countdown = 0;
 
     public MessageHandler() {
         messageQueue = new PriorityQueue<>(Comparator.comparingInt(Message::getPriority));
@@ -23,7 +23,7 @@ public class MessageHandler {
             public void run() {
                 sendMessage();
             }
-        }.runTaskTimer(LoadlyBukkit.getInstance(), 1, 1);
+        }.runTaskTimer(LoadlyBukkit.getInstance(), 1, 20);
     }
 
     public void addMessage(Message message) {
@@ -31,13 +31,8 @@ public class MessageHandler {
     }
 
     public void sendMessage() {
-        while (!messageQueue.isEmpty()) {
-            if(countdown > 0){
-                countdown--;
-                return;
-            }
-
             Message message = messageQueue.poll();
+            if(message == null) return;
             MessageReceiver receiver = message.getReceiver();
             MessageType type = message.getType();
 
@@ -93,33 +88,19 @@ public class MessageHandler {
                     }
                 }
             }
-
-            countdown = message.getCountdown();
-        }
     }
 
     public static void addMessageToQueue(Message message){
         LoadlyBukkit.getInstance().getMessageHandler().addMessage(message);
     }
 
-    public static void sendConsoleMessage(String content, int priority, MessageType type, int countdown){
-        Message message = new Message(content, priority, MessageDisplay.CHAT, type, MessageReceiver.CONSOLE, countdown);
-        addMessageToQueue(message);
-    }
-
     public static void sendConsoleMessage(String content, int priority, MessageType type){
-        sendConsoleMessage(content, priority, type, 1);
-    }
-
-    public static void sendConsoleMessage(String content, MessageType type, int countdown){
-        sendConsoleMessage(content, type.getPriority(), type, countdown);
+        addMessageToQueue(new Message(content, priority, MessageDisplay.CHAT, type, MessageReceiver.CONSOLE));
     }
 
     public static void sendConsoleMessage(String content, MessageType type){
-        sendConsoleMessage(content, type.getPriority(), type, 1);
+        sendConsoleMessage(content, type.getPriority(), type);
     }
-
-
 
 
     public enum MessageType{
@@ -163,6 +144,10 @@ public class MessageHandler {
 
         public static MessageReceiver forPlayer(UUID uuid){
             return PLAYER.setUUID(LoadlyUUID.fromUUID(uuid));
+        }
+
+        public static MessageReceiver forPlayer(LoadlyUUID uuid){
+            return MessageReceiver.forPlayer(uuid.getUuid());
         }
     }
 }

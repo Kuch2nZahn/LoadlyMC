@@ -25,7 +25,7 @@ public class EventHandler {
             MessageHandler.MessageType type = MessageHandler.MessageType.valueOf((String) ConfigManager.get(ConfigManager.ConfigParam.AUTOMATIC_JOIN_MESSAGE_TYPE)) == null ? MessageHandler.MessageType.INFO : MessageHandler.MessageType.INFO;
 
 
-            Message joinMessage = new Message(content, priority, display, type, MessageHandler.MessageReceiver.PLAYER.setUUID(LoadlyUUID.fromUUID(player.getUniqueId())), 20);
+            Message joinMessage = new Message(content, priority, display, type, MessageHandler.MessageReceiver.PLAYER.setUUID(LoadlyUUID.fromUUID(player.getUniqueId())));
             MessageHandler.addMessageToQueue(joinMessage);
         }
     }

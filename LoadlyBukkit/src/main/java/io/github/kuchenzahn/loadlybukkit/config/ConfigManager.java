@@ -15,6 +15,10 @@ public class ConfigManager {
         save();
     }
 
+    public void reloadConfig(){
+        LoadlyBukkit.getInstance().reloadConfig();
+    }
+
     private void saveConfig(){
         LoadlyBukkit.getInstance().saveConfig();
     }

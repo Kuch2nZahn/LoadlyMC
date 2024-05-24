@@ -47,7 +47,9 @@ public final class LoadlyBukkit extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        loadlyServer.shutdown();
+        if(this.loadlyServer != null){
+            loadlyServer.shutdown();
+        }
     }
 
     private void startLoadlyServer() {
